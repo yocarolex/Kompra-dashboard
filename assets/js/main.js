@@ -61,20 +61,33 @@ function renderClientsTable(data) {
                 // Aceitar "Pedidos" ou "Pedidos (por mês)"
                 const pedidosRaw = row.Pedidos !== undefined ? row.Pedidos : row['Pedidos (por mês)'];
 
-                // Função para validar datas
+                // Função para validar datas (serial Excel, dd/mm/yyyy, yyyy-mm-dd)
                 function parseValidDate(value) {
                     if (!value) return null;
-                    const d = new Date(value);
-                    // Se a data for inválida ou for 31/12/1969 ou 01/01/1970, retorna null
-                    if (isNaN(d.getTime())) return null;
-                    // Checa se é epoch zero (timestamp 0)
-                    if (d.getTime() === 0) return null;
-                    // Checa se é 31/12/1969 ou 01/01/1970
-                    const day = d.getDate();
-                    const month = d.getMonth(); // 0 = janeiro
-                    const year = d.getFullYear();
-                    if ((day === 31 && month === 11 && year === 1969) || (day === 1 && month === 0 && year === 1970)) return null;
-                    return d;
+                    // Se for número (serial Excel)
+                    if (typeof value === 'number') {
+                        // Excel: dias desde 1/1/1900, mas JS conta desde 1/1/1970
+                        // 25569 é o número de dias entre 1/1/1900 e 1/1/1970
+                        const jsDate = new Date((value - 25569) * 86400 * 1000);
+                        if (isNaN(jsDate.getTime())) return null;
+                        return jsDate;
+                    }
+                    // Se for string no formato dd/mm/yyyy
+                    if (typeof value === 'string') {
+                        // Tenta dd/mm/yyyy
+                        const match = value.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+                        if (match) {
+                            const day = parseInt(match[1], 10);
+                            const month = parseInt(match[2], 10) - 1;
+                            const year = parseInt(match[3], 10);
+                            const d = new Date(year, month, day);
+                            if (!isNaN(d.getTime())) return d;
+                        }
+                        // Tenta ISO ou outros formatos
+                        const d = new Date(value);
+                        if (!isNaN(d.getTime())) return d;
+                    }
+                    return null;
                 }
 
                 const client = {
@@ -210,7 +223,8 @@ function renderClientsTable(data) {
                 if (daysSinceLastOrder > 15) {
                     flags.push('Sem pedidos há mais de 15 dias');
                 }
-            } else if (client.pedidos_mes === 0) {
+            } else if (!client.ultimo_pedido && (!client.pedidos_mes || client.pedidos_mes === 0)) {
+                // Só alerta se não houver data de último pedido E pedidos_mes for 0 ou falsy
                 flags.push('0 pedidos no mês');
             }
             
