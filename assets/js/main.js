@@ -1,4 +1,4 @@
-        let clientsData = [];
+let clientsData = [];
         let historicalData = [];
         
         // Carregar dados do Excel
@@ -27,11 +27,45 @@
     const searchTerm = e.target.value.toLowerCase();
     const filteredClients = clientsData.filter(client =>
         client.nome.toLowerCase().includes(searchTerm)
-    );
+    );    const lastUpdateEl = document.getElementById('lastUpdate');
+    if (lastUpdateEl) {
+        lastUpdateEl.textContent = `Última atualização: ${new Date().toLocaleString('pt-BR')}`;
+    }    function checkRedFlags(client) {
+        const flags = [];
+    
+        // Sem pedidos há mais de 15 dias
+        if (client.ultimo_pedido && client.pedidos_mes > 0) {
+            const daysSinceLastOrder = (new Date() - client.ultimo_pedido) / (1000 * 60 * 60 * 24);
+            if (daysSinceLastOrder > 15) {
+                flags.push('Sem pedidos há mais de 15 dias');
+            }
+        }
+    
+        // 0 pedidos no mês OU valor transacionado 0 ou null
+        if (
+            client.pedidos_mes === 0 ||
+            client.valor_transacionado === 0 ||
+            client.valor_transacionado === null
+        ) {
+            flags.push('0 pedidos no mês');
+        }
+    
+        // Fornecedores não responderam acima de 30% (mostrar valor exato)
+        if (client.fornecedores_nao_responderam > 30) {
+            flags.push(`Fornecedores não responderam: ${client.fornecedores_nao_responderam.toFixed(1)}%`);
+        }
+    
+        // Economia abaixo de 1%
+        if (client.economia_alcancada < 0.01) {
+            flags.push('Economia abaixo de 1%');
+        }
+    
+        return flags;
+    }
     renderClientsTable(filteredClients);
 });
 
-// Função para renderizar a tabela de clientes (exemplo)
+// Função para renderizar a tabela de clientes
 function renderClientsTable(data) {
     const tableContainer = document.getElementById('tableContainer');
     if (!data || data.length === 0) {
@@ -404,8 +438,6 @@ function renderClientsTable(data) {
                                 
                                 <div class="responsible-badge">${client.responsible}</div>
                             </div>
-                            
-                            <!-- Removido: ações de contatar e agendar -->
                         </div>
                     `;}).join('')}
                 </div>
@@ -514,8 +546,6 @@ function renderClientsTable(data) {
                         <div><strong>Fornec. Não Resp.:</strong> ${client.fornecedores_nao_responderam.toFixed(1)}%</div>
                         <div><strong>Último Pedido:</strong> ${client.ultimo_pedido ? client.ultimo_pedido.toLocaleDateString('pt-BR') : 'N/A'}</div>
                     </div>
-                    
-                    <!-- Removido: ações de contatar e agendar -->
                 </div>
             `).join('');
             
@@ -721,13 +751,6 @@ function renderClientsTable(data) {
                     <div style="font-size: 0.9em; color: #94A3B8; margin-bottom: 16px;">
                         📦 ${client.pedidos_mes} pedidos | 💰 ${client.valor_transacionado.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})} | 
                         📊 ${(client.economia_alcancada * 100).toFixed(1)}% economia
-                    </div>
-                    <div style="display: flex; gap: 10px;">
-                        ${!client.contacted ? 
-                            `<button class="btn-action btn-contact" onclick="markAsContacted('${client.nome}'); openAlertDetails('${alertType}', '${alertLabel}');">Contatar</button>` :
-                            `<span style="color: #10B981; font-size: 0.9em; background: rgba(16, 185, 129, 0.2); padding: 6px 12px; border-radius: 20px;">✓ Contatado</span>`
-                        }
-                        <button class="btn-action btn-schedule" onclick="openScheduleModal('${client.nome}')">Agendar</button>
                     </div>
                 </div>
             `).join('');
