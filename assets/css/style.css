@@ -316,11 +316,17 @@
             transition: all 0.3s ease;
         }
         
-        .client-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            border-color: #3B82F6;
-        }
+    
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #10B981, #3B82F6, #8B5CF6, #EF4444);
+    }      
+        
         
         .client-item:hover::before {
             width: 6px;
