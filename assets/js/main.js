@@ -672,26 +672,28 @@ function renderClientsTable(data) {
                 'taxa-resposta': { count: 0, label: 'Taxa resposta baixa', clients: [] },
                 'economia-baixa': { count: 0, label: 'Economia baixa', clients: [] }
             };
-            
+
             clientsData.forEach(client => {
                 client.red_flags.forEach(flag => {
-                    if (flag.includes('pedidos')) {
+                    // Só conta clientes com pelo menos 1 pedido
+                    if (flag.includes('pedidos') && client.pedidos_mes > 0) {
                         alertCounts['sem-pedidos'].count++;
                         alertCounts['sem-pedidos'].clients.push(client);
                     }
-                    if (flag.includes('Fornecedores') || flag.includes('resposta')) {
+                    if ((flag.includes('Fornecedores') || flag.includes('resposta')) && client.pedidos_mes > 0) {
                         alertCounts['taxa-resposta'].count++;
                         alertCounts['taxa-resposta'].clients.push(client);
                     }
-                    if (flag.includes('Economia')) {
+                    // Só considera economia baixa se o restaurante tem pelo menos 1 pedido
+                    if (flag.includes('Economia') && client.pedidos_mes > 0) {
                         alertCounts['economia-baixa'].count++;
                         alertCounts['economia-baixa'].clients.push(client);
                     }
                 });
             });
-            
+
             const totalAlerts = Object.values(alertCounts).reduce((sum, alert) => sum + alert.count, 0);
-            
+
             if (totalAlerts === 0) {
                 document.getElementById('alertsChart').innerHTML = '<div class="no-data">✅ Nenhum alerta ativo</div>';
                 return;
