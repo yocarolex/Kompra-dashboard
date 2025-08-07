@@ -334,6 +334,12 @@ function renderClientsTable(data) {
                 const fornecedores = clientsData.map(client => Number(client.fornecedores_nao_responderam) || 0);
                 const mediaFornecedores = fornecedores.length > 0 ? fornecedores.reduce((sum, f) => sum + f, 0) / fornecedores.length : 0;
                 
+                // Média de performance (apenas restaurantes com pelo menos 1 pedido)
+                const perfClients = clientsData.filter(client => client.pedidos_mes > 0);
+                const mediaPerformance = perfClients.length > 0
+                    ? perfClients.reduce((sum, client) => sum + (Number(client.performance) || 0), 0) / perfClients.length
+                    : 0;
+                
                 // Atualizar displays com verificação de existência
                 const elTotalPedidos = document.getElementById('totalPedidos');
                 if (elTotalPedidos) elTotalPedidos.textContent = totalPedidos.toLocaleString('pt-BR');
@@ -343,6 +349,8 @@ function renderClientsTable(data) {
                 if (elMediaEconomia) elMediaEconomia.textContent = (mediaEconomia * 100).toFixed(1) + '%';
                 const elMediaFornecedores = document.getElementById('mediaFornecedores');
                 if (elMediaFornecedores) elMediaFornecedores.textContent = mediaFornecedores.toFixed(1) + '%';
+                const elMediaPerformance = document.getElementById('mediaPerformance');
+                if (elMediaPerformance) elMediaPerformance.textContent = mediaPerformance.toFixed(1) + '%';
                 
                 console.log('Estatísticas calculadas:', {
                     totalPedidos,

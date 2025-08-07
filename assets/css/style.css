@@ -1,5 +1,4 @@
-
-        * {
+* {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -199,6 +198,31 @@
             background: none;
             -webkit-text-fill-color: initial;
             background-clip: initial;
+        }
+        
+        /* Cards de totais de clientes por cor com gradiente sutil da cor + cinza */
+        .stat-card.verde {
+            background: linear-gradient(135deg, #1E293B 70%, #10B981 100%) !important;
+        }
+        .stat-card.amarelo {
+            background: linear-gradient(135deg, #1E293B 70%, #F59E0B 100%) !important;
+        }
+        .stat-card.laranja {
+            background: linear-gradient(135deg, #1E293B 70%, #F97316 100%) !important;
+        }
+        .stat-card.vermelho {
+            background: linear-gradient(135deg, #1E293B 70%, #EF4444 100%) !important;
+        }
+        
+        /* Mantém o texto claro e sem gradiente */
+        .stat-card.verde .stat-number,
+        .stat-card.amarelo .stat-number,
+        .stat-card.laranja .stat-number,
+        .stat-card.vermelho .stat-number {
+            color: #F1F5F9 !important;
+            background: none !important;
+            -webkit-text-fill-color: initial !important;
+            background-clip: initial !important;
         }
         
         .controls-section {
@@ -653,25 +677,36 @@
             border-color: #DC2626;
         }
         
-        /* Summary cards with gradients */
-        .summary-card {
-            background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+        /* Cards de resumo e estatísticas com o mesmo tom de cinza do header */
+        .stat-card,
+        .summary-card,
+        .summary-card.revenue,
+        .summary-card.economy,
+        .summary-card.suppliers,
+        .summary-card.performance {
+            background: linear-gradient(135deg, #1E293B 0%, #334155 100%) !important;
             border-radius: 12px;
+            color: #F1F5F9;
+            border: 1px solid #334155;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
         }
         
-        .summary-card.revenue {
-            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
-            border-radius: 12px;
+        /* Remove gradientes coloridos antigos */
+        .summary-card,
+        .summary-card.revenue,
+        .summary-card.economy,
+        .summary-card.suppliers,
+        .summary-card.performance {
+            background: linear-gradient(135deg, #1E293B 0%, #334155 100%) !important;
         }
         
-        .summary-card.economy {
-            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-            border-radius: 12px;
-        }
-        
-        .summary-card.suppliers {
-            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
-            border-radius: 12px;
+        /* Ajuste para manter contraste dos números */
+        .stat-card .stat-number,
+        .summary-card .stat-number {
+            color: #F1F5F9 !important;
+            background: none !important;
+            -webkit-text-fill-color: initial !important;
+            background-clip: initial !important;
         }
         
         @keyframes fadeIn {

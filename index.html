@@ -75,7 +75,7 @@
         <!-- Card de Resumo Semanal -->
         <div style="margin-bottom: 24px;">
             <!-- Linha 1: Totais -->
-            <div class="stats-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 16px;">
+            <div class="stats-grid stats-totals" style="grid-template-columns: 1fr 1fr; margin-bottom: 16px;">
                 <div class="stat-card summary-card fade-in" style="color: white;">
                     <div class="stat-number" id="totalPedidos" style="color: white; font-size: 2.4em;">0</div>
                     <div class="stat-label" style="color: rgba(255,255,255,0.9);">Total Pedidos no Mês</div>
@@ -87,7 +87,7 @@
             </div>
             
             <!-- Linha 2: Médias -->
-            <div class="stats-grid" style="grid-template-columns: 1fr 1fr;">
+            <div class="stats-grid stats-medias">
                 <div class="stat-card summary-card economy fade-in" style="color: white;">
                     <div class="stat-number" id="mediaEconomia" style="color: white;">0%</div>
                     <div class="stat-label" style="color: rgba(255,255,255,0.9);">Média de Economia</div>
@@ -95,6 +95,10 @@
                 <div class="stat-card summary-card suppliers fade-in" style="color: white;">
                     <div class="stat-number" id="mediaFornecedores" style="color: white;">0%</div>
                     <div class="stat-label" style="color: rgba(255,255,255,0.9);">Média Fornecedores que não Responderam</div>
+                </div>
+                <div class="stat-card summary-card performance fade-in" style="color: white;">
+                    <div class="stat-number" id="mediaPerformance" style="color: white;">0%</div>
+                    <div class="stat-label" style="color: rgba(255,255,255,0.9);">Média de Performance</div>
                 </div>
             </div>
         </div>
