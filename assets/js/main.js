@@ -492,14 +492,16 @@ function renderClientsTable(data) {
         function filterRedFlags() {
             const selectedRestaurant = document.getElementById('restaurantFilter').value;
             let filteredClients = clientsData;
-            
+
             if (selectedRestaurant) {
                 filteredClients = clientsData.filter(client => client.nome === selectedRestaurant);
             }
-            
-            // Filtrar apenas clientes com red flags
-            const clientsWithFlags = filteredClients.filter(client => client.red_flags.length > 0);
-            
+
+            // Filtrar apenas clientes com red flags E pedidos_mes > 0
+            const clientsWithFlags = filteredClients.filter(client =>
+                client.red_flags.length > 0 && client.pedidos_mes > 0
+            );
+
             displayRedFlags(clientsWithFlags);
             updateRedFlagsSummary(clientsWithFlags);
         }
