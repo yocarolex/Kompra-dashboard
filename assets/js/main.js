@@ -156,6 +156,7 @@ function renderClientsTable(data) {
 
             updateDashboard();
             showAlerts();
+            updateMediaFornecedores(); // <-- Adicione esta linha aqui
         }
         
         // Converter valores textuais
