@@ -17,7 +17,7 @@ let clientsData = [];
                     processExcelData(jsonData);
                     document.getElementById('lastUpdate').textContent = `Última atualização: ${new Date().toLocaleString('pt-BR')}`;
                 } catch (error) {
-                    alert('Erro ao processar arquivo Excel: ' + error.message);
+                    alert('Existem restaurantes sem pedidos');
                 }
             };
             reader.readAsArrayBuffer(file);
@@ -156,7 +156,6 @@ function renderClientsTable(data) {
 
             updateDashboard();
             showAlerts();
-            updateMediaFornecedores(); // <-- Adicione esta linha aqui
         }
         
         // Converter valores textuais

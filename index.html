@@ -133,7 +133,6 @@
                 </div>
             </div>
 
-            <!-- Sidebar com Gráficos -->
             <div class="sidebar">
                 <div class="chart-container">
                     <h3 class="chart-title">📊 Distribuição por Score</h3>
@@ -149,27 +148,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Modal para Agendar Follow-up -->
-    <div id="scheduleModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <h3 style="color: #F1F5F9; margin-bottom: 24px;">📅 Agendar Follow-up</h3>
-            <div class="form-group">
-                <label for="clientName">Restaurante:</label>
-                <input type="text" id="clientName" readonly />
-            </div>
-            <div class="form-group">
-                <label for="followupDate">Data/Hora do Follow-up:</label>
-                <input type="datetime-local" id="followupDate" />
-            </div>
-            <div class="form-group">
-                <label for="followupNotes">Observações:</label>
-                <textarea id="followupNotes" placeholder="Detalhes do agendamento..."></textarea>
-            </div>
-            <button class="btn-save" onclick="saveFollowup()">💾 Salvar Agendamento</button>
         </div>
     </div>
 

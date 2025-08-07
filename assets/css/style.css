@@ -202,10 +202,10 @@
         
         /* Cards de totais de clientes por cor com gradiente sutil da cor + cinza */
         .stat-card.verde {
-            background: linear-gradient(135deg, #1E293B 70%, #10B981 100%) !important;
+            background: linear-gradient(135deg, #1E293B 40%, #10B981 100%) !important;
         }
         .stat-card.amarelo {
-            background: linear-gradient(135deg, #1E293B 70%, #F59E0B 100%) !important;
+            background: linear-gradient(135deg, #1E293B 40%, #F59E0B 100%) !important;
         }
         .stat-card.laranja {
             background: linear-gradient(135deg, #1E293B 70%, #F97316 100%) !important;
