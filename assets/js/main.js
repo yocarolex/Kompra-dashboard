@@ -176,27 +176,30 @@ function renderClientsTable(data) {
         // Calcular Health Score
         function calculateHealthScore(client) {
             let score = 0;
-            // Uso da plataforma (0 - 55 pontos)
+            // Uso da plataforma (0 - 50 pontos)
             // Pedidos por mês (0 - 30 pontos)
             let pedidosScore = 0;
             if (client.pedidos_mes === 0) pedidosScore = 0;
             else if (client.pedidos_mes === 1) pedidosScore = 5;
             else if (client.pedidos_mes === 2) pedidosScore = 10;
-            else if (client.pedidos_mes === 3) pedidosScore = 20;
+            else if (client.pedidos_mes === 3) pedidosScore = 25;
             else if (client.pedidos_mes >= 4) pedidosScore = 30;
             score += pedidosScore;
-            // Valor transacionado (0 a 20 pontos)
+
+            // Valor transacionado (0 a 10 pontos)
             let valorScore = 0;
             if (client.valor_transacionado <= 5000) valorScore = 0;
             else if (client.valor_transacionado <= 30000) valorScore = 5;
-            else valorScore = 15;
+            else valorScore = 10;
             score += valorScore;
+
             // Funcionalidades utilizadas (5 - 10 pontos)
             // Só kompra: 5 pontos, Kompra + Estoque: 10 pontos
             let funcScore = client.ultima_alteracao_estoque ? 10 : 5;
             score += funcScore;
-            // Engajamento (0 - 30 pontos)
-            // Taxa de respostas dos fornecedores (0 - 30 pontos)
+
+            // Engajamento (0 - 15 pontos)
+            // Taxa de respostas dos fornecedores (0 - 15 pontos)
             const taxa_resposta = 1 - (client.fornecedores_nao_responderam / 100);
             let respostaScore = 0;
             if (taxa_resposta <= 0.5) respostaScore = 0;
@@ -204,7 +207,8 @@ function renderClientsTable(data) {
             else if (taxa_resposta <= 0.8) respostaScore = 10;
             else respostaScore = 15;
             score += respostaScore;
-            // Resultados (0 - 30 pontos)
+
+            // Resultados (0 - 35 pontos)
             // Economia alcançada (0 -10 pontos)
             let economiaScore = 0;
             if (client.economia_alcancada <= 0.01) economiaScore = 0;
@@ -212,13 +216,19 @@ function renderClientsTable(data) {
             else if (client.economia_alcancada <= 0.08) economiaScore = 7;
             else economiaScore = 10;
             score += economiaScore;
-            // NPS (0 - 20 pontos)
-            // Não satisfeito: 0, Médio satisfeito: 10, Satisfeito: 20
+
+            // NPS (0 - 25 pontos)
+            // 0 a 5 pontos - 0 pontos
+            // 6 a 7 pontos -10 pontos
+            // 8 a 9 pontos - 20 pontos
+            // 10 pontos -25 pontos
             let npsScore = 0;
-            if (client.satisfacao_declarada === 0) npsScore = 0;
-            else if (client.satisfacao_declarada === 5) npsScore = 10;
-            else if (client.satisfacao_declarada === 10) npsScore = 20;
+            if (client.satisfacao_declarada >= 0 && client.satisfacao_declarada <= 5) npsScore = 0;
+            else if (client.satisfacao_declarada >= 6 && client.satisfacao_declarada <= 7) npsScore = 10;
+            else if (client.satisfacao_declarada >= 8 && client.satisfacao_declarada <= 9) npsScore = 20;
+            else if (client.satisfacao_declarada === 10) npsScore = 25;
             score += npsScore;
+
             // Limitar entre 0 e 100
             const finalScore = Math.min(100, Math.max(0, score));
             return finalScore;
