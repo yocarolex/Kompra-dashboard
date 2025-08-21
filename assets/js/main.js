@@ -313,7 +313,7 @@ function renderClientsTable(data) {
         function updateStats() {
             const stats = {
                 verde: clientsData.filter(c => c.classification === 'verde').length,
-                amarelo: clientsData.filter(c => c.classification === 'amarelo').length,
+                azul: clientsData.filter(c => c.classification === 'azul').length,
                 laranja: clientsData.filter(c => c.classification === 'laranja').length,
                 vermelho: clientsData.filter(c => c.classification === 'vermelho').length
             };
@@ -323,8 +323,8 @@ function renderClientsTable(data) {
             // Estatísticas por classificação com verificação de existência
             const elVerdeCount = document.getElementById('verdeCount');
             if (elVerdeCount) elVerdeCount.textContent = stats.verde;
-            const elAmareloCount = document.getElementById('amareloCount');
-            if (elAmareloCount) elAmareloCount.textContent = stats.amarelo;
+            const elAzulCount = document.getElementById('azulCount');
+            if (elAzulCount) elAzulCount.textContent = stats.azul;
             const elLaranjaCount = document.getElementById('laranjaCount');
             if (elLaranjaCount) elLaranjaCount.textContent = stats.laranja;
             const elVermelhoCount = document.getElementById('vermelhoCount');
@@ -332,7 +332,7 @@ function renderClientsTable(data) {
             
             if (total > 0) {
                 document.getElementById('verdeProgress').style.width = `${(stats.verde / total) * 100}%`;
-                document.getElementById('amareloProgress').style.width = `${(stats.amarelo / total) * 100}%`;
+                document.getElementById('azulProgress').style.width = `${(stats.azul / total) * 100}%`;
                 document.getElementById('laranjaProgress').style.width = `${(stats.laranja / total) * 100}%`;
                 document.getElementById('vermelhoProgress').style.width = `${(stats.vermelho / total) * 100}%`;
             }
@@ -409,9 +409,9 @@ function renderClientsTable(data) {
             }
             
             if (scoreFilter) {
-                // Corrige filtro para 'amarelo' (case-insensitive)
-                if (scoreFilter.toLowerCase() === 'amarelo') {
-                    filteredData = filteredData.filter(c => c.classification && c.classification.toLowerCase() === 'amarelo');
+                // Corrige filtro para 'azul' (case-insensitive)
+                if (scoreFilter.toLowerCase() === 'azul') {
+                    filteredData = filteredData.filter(c => c.classification && c.classification.toLowerCase() === 'azul');
                 } else {
                     filteredData = filteredData.filter(c => c.classification === scoreFilter);
                 }
@@ -484,7 +484,7 @@ function renderClientsTable(data) {
         function getScoreColor(classification) {
             switch(classification) {
                 case 'verde': return 'linear-gradient(135deg, #10B981, #059669)';
-                case 'amarelo': return 'linear-gradient(135deg, #F59E0B, #D97706)';
+            case 'azul': return 'linear-gradient(135deg, #3B82F6, #2563EB)';
                 case 'laranja': return 'linear-gradient(135deg, #F97316, #EA580C)';
                 case 'vermelho': return 'linear-gradient(135deg, #EF4444, #DC2626)';
                 default: return 'linear-gradient(135deg, #6B7280, #4B5563)';
@@ -655,7 +655,7 @@ function renderClientsTable(data) {
         function updateScoreChart() {
             const stats = {
                 verde: clientsData.filter(c => c.classification === 'verde').length,
-                amarelo: clientsData.filter(c => c.classification === 'amarelo').length,
+                azul: clientsData.filter(c => c.classification === 'azul').length,
                 laranja: clientsData.filter(c => c.classification === 'laranja').length,
                 vermelho: clientsData.filter(c => c.classification === 'vermelho').length
             };
@@ -670,7 +670,7 @@ function renderClientsTable(data) {
             // Array para renderizar cada barra
             const scoreTypes = [
                 { label: 'Verde (≥85)', key: 'verde', color: 'linear-gradient(90deg, #10B981, #059669)' },
-                { label: 'Amarelo (70-84)', key: 'amarelo', color: 'linear-gradient(90deg, #F59E0B, #D97706)' },
+                { label: 'Azul (70-84)', key: 'azul', color: 'linear-gradient(90deg, #3B82F6, #2563EB)' },
                 { label: 'Laranja (50-69)', key: 'laranja', color: 'linear-gradient(90deg, #F97316, #EA580C)' },
                 { label: 'Vermelho (<50)', key: 'vermelho', color: 'linear-gradient(90deg, #EF4444, #DC2626)' }
             ];
@@ -815,7 +815,7 @@ function renderClientsTable(data) {
                 summary: {
                     total_clients: clientsData.length,
                     verde: clientsData.filter(c => c.classification === 'verde').length,
-                    amarelo: clientsData.filter(c => c.classification === 'amarelo').length,
+                    azul: clientsData.filter(c => c.classification === 'azul').length,
                     laranja: clientsData.filter(c => c.classification === 'laranja').length,
                     vermelho: clientsData.filter(c => c.classification === 'vermelho').length,
                     total_alerts: clientsData.reduce((sum, c) => sum + c.red_flags.length, 0),
