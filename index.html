@@ -57,6 +57,13 @@
                 </div>
             </div>
             <div class="stat-card fade-in">
+                <div class="stat-number amarelo" id="amareloCount">0</div>
+                <div class="stat-label">Clientes Amarelo</div>
+                <div class="progress-bar">
+                    <div class="progress-fill amarelo" id="amareloProgress"></div>
+                </div>
+            </div>
+            <div class="stat-card fade-in">
                 <div class="stat-number laranja" id="laranjaCount">0</div>
                 <div class="stat-label">Clientes Laranja</div>
                 <div class="progress-bar">
@@ -110,7 +117,8 @@
                 <option value="">Todos os Scores</option>
                 <option value="verde">Verde (85-100)</option>
                 <option value="azul">Azul (70-84)</option>
-                <option value="laranja">Laranja (50-69)</option>
+                <option value="amarelo">Amarelo (60-69)</option>
+                <option value="laranja">Laranja (50-59)</option>
                 <option value="vermelho">Vermelho (0-49)</option>
             </select>
             <select class="filter-select" id="responsibleFilter">

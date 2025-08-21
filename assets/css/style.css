@@ -114,7 +114,7 @@
         
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 24px;
             margin-bottom: 32px;
         }
@@ -131,15 +131,11 @@
             overflow: hidden;
         }
         
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #10B981, #3B82F6, #8B5CF6, #EF4444);
-        }
+        .stat-card.verde::before { background: linear-gradient(90deg, #10B981, #059669); }
+        .stat-card.azul::before { background: linear-gradient(90deg, #3B82F6, #2563EB); }
+        .stat-card.amarelo::before { background: linear-gradient(90deg, #F59E0B, #D97706); }
+        .stat-card.laranja::before { background: linear-gradient(90deg, #F97316, #EA580C); }
+        .stat-card.vermelho::before { background: linear-gradient(90deg, #EF4444, #DC2626); }
         
         .stat-card:hover {
             transform: translateY(-5px);

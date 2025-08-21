@@ -106,17 +106,30 @@ function renderClientsTable(data) {
                         if (isNaN(jsDate.getTime())) return null;
                         return jsDate;
                     }
-                    // Se for string no formato dd/mm/yyyy
+                    // Se for string
                     if (typeof value === 'string') {
+                        // Tenta dd/mm/yyyy, hh:mm ou dd/mm/yyyy hh:mm
+                        const dateTimeMatch = value.match(/^(\d{2})\/(\d{2})\/(\d{4})[,\s]+(\d{2}):(\d{2})/);
+                        if (dateTimeMatch) {
+                            const day = parseInt(dateTimeMatch[1], 10);
+                            const month = parseInt(dateTimeMatch[2], 10) - 1;
+                            const year = parseInt(dateTimeMatch[3], 10);
+                            const hour = parseInt(dateTimeMatch[4], 10);
+                            const minute = parseInt(dateTimeMatch[5], 10);
+                            const d = new Date(year, month, day, hour, minute);
+                            if (!isNaN(d.getTime())) return d;
+                        }
+
                         // Tenta dd/mm/yyyy
-                        const match = value.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
-                        if (match) {
-                            const day = parseInt(match[1], 10);
-                            const month = parseInt(match[2], 10) - 1;
-                            const year = parseInt(match[3], 10);
+                        const dateMatch = value.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+                        if (dateMatch) {
+                            const day = parseInt(dateMatch[1], 10);
+                            const month = parseInt(dateMatch[2], 10) - 1;
+                            const year = parseInt(dateMatch[3], 10);
                             const d = new Date(year, month, day);
                             if (!isNaN(d.getTime())) return d;
                         }
+                        
                         // Tenta ISO ou outros formatos
                         const d = new Date(value);
                         if (!isNaN(d.getTime())) return d;
@@ -266,6 +279,7 @@ function renderClientsTable(data) {
         function getScoreClassification(score) {
             if (score >= 85) return 'verde';
             if (score >= 70) return 'azul';
+            if (score >= 60) return 'amarelo';
             if (score >= 50) return 'laranja';
             return 'vermelho';
         }
@@ -326,6 +340,7 @@ function renderClientsTable(data) {
             const stats = {
                 verde: clientsData.filter(c => c.classification === 'verde').length,
                 azul: clientsData.filter(c => c.classification === 'azul').length,
+                amarelo: clientsData.filter(c => c.classification === 'amarelo').length,
                 laranja: clientsData.filter(c => c.classification === 'laranja').length,
                 vermelho: clientsData.filter(c => c.classification === 'vermelho').length
             };
@@ -333,18 +348,16 @@ function renderClientsTable(data) {
             const total = clientsData.length;
             
             // Estatísticas por classificação com verificação de existência
-            const elVerdeCount = document.getElementById('verdeCount');
-            if (elVerdeCount) elVerdeCount.textContent = stats.verde;
-            const elAzulCount = document.getElementById('azulCount');
-            if (elAzulCount) elAzulCount.textContent = stats.azul;
-            const elLaranjaCount = document.getElementById('laranjaCount');
-            if (elLaranjaCount) elLaranjaCount.textContent = stats.laranja;
-            const elVermelhoCount = document.getElementById('vermelhoCount');
-            if (elVermelhoCount) elVermelhoCount.textContent = stats.vermelho;
+            document.getElementById('verdeCount').textContent = stats.verde;
+            document.getElementById('azulCount').textContent = stats.azul;
+            document.getElementById('amareloCount').textContent = stats.amarelo;
+            document.getElementById('laranjaCount').textContent = stats.laranja;
+            document.getElementById('vermelhoCount').textContent = stats.vermelho;
             
             if (total > 0) {
                 document.getElementById('verdeProgress').style.width = `${(stats.verde / total) * 100}%`;
                 document.getElementById('azulProgress').style.width = `${(stats.azul / total) * 100}%`;
+                document.getElementById('amareloProgress').style.width = `${(stats.amarelo / total) * 100}%`;
                 document.getElementById('laranjaProgress').style.width = `${(stats.laranja / total) * 100}%`;
                 document.getElementById('vermelhoProgress').style.width = `${(stats.vermelho / total) * 100}%`;
             }
@@ -496,7 +509,8 @@ function renderClientsTable(data) {
         function getScoreColor(classification) {
             switch(classification) {
                 case 'verde': return 'linear-gradient(135deg, #10B981, #059669)';
-            case 'azul': return 'linear-gradient(135deg, #3B82F6, #2563EB)';
+                case 'azul': return 'linear-gradient(135deg, #3B82F6, #2563EB)';
+                case 'amarelo': return 'linear-gradient(135deg, #F59E0B, #D97706)';
                 case 'laranja': return 'linear-gradient(135deg, #F97316, #EA580C)';
                 case 'vermelho': return 'linear-gradient(135deg, #EF4444, #DC2626)';
                 default: return 'linear-gradient(135deg, #6B7280, #4B5563)';
@@ -683,6 +697,7 @@ function renderClientsTable(data) {
             const scoreTypes = [
                 { label: 'Verde (≥85)', key: 'verde', color: 'linear-gradient(90deg, #10B981, #059669)' },
                 { label: 'Azul (70-84)', key: 'azul', color: 'linear-gradient(90deg, #3B82F6, #2563EB)' },
+                { label: 'Amarelo (60-69)', key: 'amarelo', color: 'linear-gradient(90deg, #F59E0B, #D97706)' },
                 { label: 'Laranja (50-69)', key: 'laranja', color: 'linear-gradient(90deg, #F97316, #EA580C)' },
                 { label: 'Vermelho (<50)', key: 'vermelho', color: 'linear-gradient(90deg, #EF4444, #DC2626)' }
             ];
@@ -783,7 +798,8 @@ function renderClientsTable(data) {
                 });
             });
             
-            const clients = alertCounts[alertType].clients;
+            const clientsWithAlert = alertCounts[alertType].clients;
+            const clients = clientsWithAlert.filter(c => c.pedidos_mes > 0);
             
             // Abrir modal específico para este tipo de alerta
             document.getElementById('alertDetailsModal').style.display = 'block';
