@@ -137,6 +137,17 @@ function renderClientsTable(data) {
                     return 0;
                 }
 
+                // Novo: NPS como nota de 0 a 10
+                let nps = 0;
+                if (row['NPS'] !== undefined && row['NPS'] !== null && row['NPS'] !== '') {
+                    nps = parseInt(row['NPS']);
+                    if (isNaN(nps)) nps = 0;
+                } else if (row['Satisfação declarada'] !== undefined && row['Satisfação declarada'] !== null && row['Satisfação declarada'] !== '') {
+                    // fallback para campo antigo, se existir
+                    nps = parseInt(row['Satisfação declarada']);
+                    if (isNaN(nps)) nps = 0;
+                }
+
                 const client = {
                     id: row.Id || '',
                     nome: (row.Restaurante !== undefined && row.Restaurante !== null) ? String(row.Restaurante) : '',
@@ -155,7 +166,8 @@ function renderClientsTable(data) {
                     ultima_alteracao_estoque: parseValidDate(row['Última alteração de estoque']),
                     contacted: false,
                     followup_scheduled: null,
-                    contact_history: []
+                    contact_history: [],
+                    satisfacao_declarada: nps // novo campo NPS
                 };
 
                 // Calcular Health Score

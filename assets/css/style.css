@@ -189,6 +189,28 @@
             background-clip: text;
         }
 
+        .azul { 
+            background: linear-gradient(135deg, #3B82F6, #2563EB) !important;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Card azul */
+        .stat-card.azul {
+            background: linear-gradient(135deg, #1E293B 40%, #3B82F6 100%) !important;
+        }
+        /* Mantém o texto claro e sem gradiente */
+        .stat-card.azul .stat-number {
+            color: #F1F5F9 !important;
+            background: none !important;
+            -webkit-text-fill-color: initial !important;
+            background-clip: initial !important;
+        }
+        .progress-fill.azul {
+            background: linear-gradient(90deg, #3B82F6, #2563EB);
+        }
+
         /* Ajuste para garantir contraste dos números nos cards de estatísticas */
         .stat-card .stat-number.verde,
         .stat-card .stat-number.amarelo,
