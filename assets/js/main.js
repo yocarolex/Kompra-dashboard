@@ -213,28 +213,31 @@ function renderClientsTable(data) {
 
             // Engajamento (0 - 15 pontos)
             // Taxa de respostas dos fornecedores (0 - 15 pontos)
-            const taxa_resposta = 1 - (client.fornecedores_nao_responderam / 100);
+            // Regra: 0 a 40% - 0; 41% a 60% - 5; 61% a 80% - 10; acima de 81% - 15
             let respostaScore = 0;
-            if (taxa_resposta <= 0.5) respostaScore = 0;
-            else if (taxa_resposta <= 0.7) respostaScore = 5;
-            else if (taxa_resposta <= 0.8) respostaScore = 10;
-            else respostaScore = 15;
+            const taxa_resposta = 100 - (client.fornecedores_nao_responderam);
+            if (taxa_resposta >= 0 && taxa_resposta <= 40) respostaScore = 0;
+            else if (taxa_resposta >= 41 && taxa_resposta <= 60) respostaScore = 5;
+            else if (taxa_resposta >= 61 && taxa_resposta <= 80) respostaScore = 10;
+            else if (taxa_resposta >= 81) respostaScore = 15;
             score += respostaScore;
 
             // Resultados (0 - 45 pontos)
             // Economia alcançada (0 -10 pontos)
             let economiaScore = 0;
-            if (client.economia_alcancada <= 0.01) economiaScore = 0;
-            else if (client.economia_alcancada <= 0.04) economiaScore = 3;
-            else if (client.economia_alcancada <= 0.08) economiaScore = 7;
-            else economiaScore = 10;
+            // 0 a 1% - 0; 2% a 4% - 3; 5% a 7% - 7; acima de 8% - 10
+            const economia = client.economia_alcancada * 100;
+            if (economia >= 0 && economia <= 1) economiaScore = 0;
+            else if (economia >= 2 && economia <= 4) economiaScore = 3;
+            else if (economia >= 5 && economia <= 7) economiaScore = 7;
+            else if (economia > 8) economiaScore = 10;
             score += economiaScore;
 
             // NPS (0 - 35 pontos)
-            // 0 a 5 pontos - 0 pontos
-            // 6 a 7 pontos -15 pontos
-            // 8 a 9 pontos - 30 pontos
-            // 10 pontos -35 pontos
+            // nota de 0 a 5  - 0 pontos
+            // nota de 6 a 7 -15 pontos
+            // nota de 8 a 9 - 30 pontos
+            // nota 10 - 35 pontos
             let npsScore = 0;
             if (client.satisfacao_declarada >= 0 && client.satisfacao_declarada <= 5) npsScore = 0;
             else if (client.satisfacao_declarada >= 6 && client.satisfacao_declarada <= 7) npsScore = 15;
@@ -250,7 +253,7 @@ function renderClientsTable(data) {
         // Classificar score
         function getScoreClassification(score) {
             if (score >= 85) return 'verde';
-            if (score >= 70) return 'amarelo';
+            if (score >= 70) return 'azul';
             if (score >= 50) return 'laranja';
             return 'vermelho';
         }
