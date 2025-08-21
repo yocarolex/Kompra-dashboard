@@ -124,16 +124,29 @@ function renderClientsTable(data) {
                     return null;
                 }
 
+
+                // Função para tratar valores percentuais (aceita "47,84%", "47.84", 47.84, etc)
+                function parsePercent(val) {
+                    if (typeof val === 'string') {
+                        let clean = val.replace('%','').replace(',','.').trim();
+                        let num = parseFloat(clean);
+                        if (isNaN(num)) return 0;
+                        return num;
+                    }
+                    if (typeof val === 'number') return val;
+                    return 0;
+                }
+
                 const client = {
                     id: row.Id || '',
                     nome: (row.Restaurante !== undefined && row.Restaurante !== null) ? String(row.Restaurante) : '',
                     usuarios: parseInt(row.Usuários) || 0,
                     pedidos_mes: parseInt(pedidosRaw) || 0,
                     valor_transacionado: valorTransacionado,
-                    fornecedores_nao_responderam: parseFloat(row['Fornecedores não responderam (%)']) || 0,
+                    fornecedores_nao_responderam: parsePercent(row['Fornecedores não responderam (%)']) || 0,
                     quotacoes: parseInt(row.Quotações) || 0,
-                    economia_alcancada: parseFloat(row['Economia (%)']) / 100 || 0,
-                    performance: parseFloat(row['Performance (%)']) || 0,
+                    economia_alcancada: parsePercent(row['Economia (%)']) / 100 || 0,
+                    performance: parsePercent(row['Performance (%)']) || 0,
                     erros_cotacao: parseInt(row['Erros de Cotação']) || 0,
                     link_ultimo_pedido: row['Link Ult. Pedido'] || '',
                     status_ultimo_pedido: row['Status Ult. Pedido'] || '',
